@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignorar configuración local
+/src/main/resources/application.yaml
+
+# Ignorar bases de datos H2 persistentes
+/data/*
+*.mv.db
+*.trace.db

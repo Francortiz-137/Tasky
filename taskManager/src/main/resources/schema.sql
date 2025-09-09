@@ -1,0 +1,7 @@
+CREATE TABLE Task (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(500),
+    status VARCHAR(50) NOT NULL,
+    creationDate TIMESTAMP NOT NULL
+);

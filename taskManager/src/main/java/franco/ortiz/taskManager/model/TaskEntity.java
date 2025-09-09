@@ -1,21 +1,25 @@
 package franco.ortiz.taskManager.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Table(name = "Task")
 public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
     String description;
-    String status;
+    @Enumerated(EnumType.STRING)
+    Status status;
     LocalDateTime creationDate;
 }
