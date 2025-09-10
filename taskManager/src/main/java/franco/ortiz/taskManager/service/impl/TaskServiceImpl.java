@@ -18,11 +18,33 @@ public class TaskServiceImpl implements ITaskService {
 
     @Override
     public TaskEntity findByName(String name) {
-        return taskRepository.findByName(name);
+        return taskRepository.findByName(name).orElse(null);
     }
 
     @Override
     public List<TaskEntity> findAll() {
         return taskRepository.findAll();
+    }
+
+    @Override
+    public TaskEntity findById(long id) {
+        //todo exception management
+        return taskRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public TaskEntity save(TaskEntity task) {
+        return taskRepository.save(task);
+    }
+
+    @Override
+    public void delete(Long id) {
+     taskRepository.deleteById(id);
+    }
+
+    @Override
+    public TaskEntity update(Long id, TaskEntity newtask) {
+        newtask.setId(id);
+        return taskRepository.save(newtask);
     }
 }

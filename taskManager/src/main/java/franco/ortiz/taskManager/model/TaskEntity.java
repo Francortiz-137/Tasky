@@ -21,5 +21,6 @@ public class TaskEntity {
     String description;
     @Enumerated(EnumType.STRING)
     Status status;
+    @Column(updatable = false, nullable = false, name = "CREATION_DATE")
     LocalDateTime creationDate;
 }
