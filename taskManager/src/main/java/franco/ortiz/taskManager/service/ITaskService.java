@@ -1,14 +1,16 @@
 package franco.ortiz.taskManager.service;
 
+import franco.ortiz.taskManager.DTO.TaskDTOInput;
+import franco.ortiz.taskManager.DTO.TaskDTOOutput;
 import franco.ortiz.taskManager.model.TaskEntity;
 
 import java.util.List;
 
 public interface ITaskService {
-    TaskEntity findByName(String name);
-    List<TaskEntity> findAll();
-    TaskEntity findById(long id);
-    TaskEntity save(TaskEntity task);
+    TaskDTOOutput findByName(String name);
+    List<TaskDTOOutput> findAll();
+    TaskDTOOutput findById(long id);
+    TaskDTOOutput save(TaskDTOInput task);
     void delete(Long id);
-    TaskEntity update(Long id, TaskEntity newtask);
+    TaskDTOOutput update(Long id, TaskDTOInput newtask);
 }

@@ -1,5 +1,9 @@
 package franco.ortiz.taskManager.service.impl;
 
+import franco.ortiz.taskManager.DTO.TaskDTOInput;
+import franco.ortiz.taskManager.DTO.TaskDTOOutput;
+import franco.ortiz.taskManager.DTO.TaskMapper;
+import franco.ortiz.taskManager.exception.ResourceNotFoundException;
 import franco.ortiz.taskManager.model.TaskEntity;
 import franco.ortiz.taskManager.repository.TaskRepository;
 import franco.ortiz.taskManager.service.ITaskService;
@@ -17,24 +21,24 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     @Override
-    public TaskEntity findByName(String name) {
-        return taskRepository.findByName(name).orElse(null);
+    public TaskDTOOutput findByName(String name) {
+        return TaskMapper.toDTO(taskRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("La tarea con nombre: " + name + " no existe")));
     }
 
     @Override
-    public List<TaskEntity> findAll() {
-        return taskRepository.findAll();
+    public List<TaskDTOOutput> findAll() {
+        return taskRepository.findAll().stream().map(TaskMapper::toDTO).toList();
     }
 
     @Override
-    public TaskEntity findById(long id) {
-        //todo exception management
-        return taskRepository.findById(id).orElse(null);
+    public TaskDTOOutput findById(long id) {
+        return TaskMapper.toDTO(taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("La tarea con id: " + id + " no existe")));
     }
 
     @Override
-    public TaskEntity save(TaskEntity task) {
-        return taskRepository.save(task);
+    public TaskDTOOutput save(TaskDTOInput task) {
+        TaskEntity taskEntity = TaskMapper.toEntity(task);
+        return TaskMapper.toDTO(taskRepository.save(taskEntity));
     }
 
     @Override
@@ -43,8 +47,9 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     @Override
-    public TaskEntity update(Long id, TaskEntity newtask) {
-        newtask.setId(id);
-        return taskRepository.save(newtask);
+    public TaskDTOOutput update(Long id, TaskDTOInput newtask) {
+        TaskEntity taskEntity = TaskMapper.toEntity(newtask);
+        taskEntity.setId(id);
+        return TaskMapper.toDTO(taskRepository.save(taskEntity));
     }
 }

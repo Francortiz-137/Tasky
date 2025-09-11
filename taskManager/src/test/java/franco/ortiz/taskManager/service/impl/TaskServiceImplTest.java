@@ -1,5 +1,8 @@
 package franco.ortiz.taskManager.service.impl;
 
+import franco.ortiz.taskManager.DTO.TaskDTOInput;
+import franco.ortiz.taskManager.DTO.TaskDTOOutput;
+import franco.ortiz.taskManager.DTO.TaskMapper;
 import franco.ortiz.taskManager.model.TaskEntity;
 import franco.ortiz.taskManager.repository.TaskRepository;
 import franco.ortiz.taskManager.service.ITaskService;
@@ -45,7 +48,7 @@ class TaskServiceImplTest {
 
         when(taskRepository.findByName("Task1")).thenReturn(Optional.of(task));
         //Act
-        TaskEntity result = taskServiceImpl.findByName("Task1");
+        TaskDTOOutput result = taskServiceImpl.findByName("Task1");
         //Assert
         assertNotNull(result);
         assertEquals("Task1", result.getName());
@@ -71,7 +74,7 @@ class TaskServiceImplTest {
         task3.setDescription("Task3");
 
         when(taskRepository.findAll()).thenReturn(List.of(task));
-        List<TaskEntity> result = taskServiceImpl.findAll();
+        List<TaskDTOOutput> result = taskServiceImpl.findAll();
         assertNotNull(result);
         assertEquals(3, result.size());
         verify(taskRepository, times(1)).findAll();
@@ -88,7 +91,7 @@ class TaskServiceImplTest {
         when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
 
         //Act
-        TaskEntity result = taskServiceImpl.findById(1L);
+        TaskDTOOutput result = taskServiceImpl.findById(1L);
 
         //Assert
         assertNotNull(result);
@@ -98,16 +101,18 @@ class TaskServiceImplTest {
 
     @Test
     void save() {
-        TaskEntity task = new TaskEntity();
-        task.setId(1L);
+        TaskDTOInput task = new TaskDTOInput();
         task.setName("Task1");
         task.setDescription("Task1");
 
-        when(taskRepository.save(task)).thenReturn(task);
-        TaskEntity result = taskServiceImpl.save(task);
+        TaskEntity taskEntity = TaskMapper.toEntity(task);
+        taskEntity.setId(1L);
+
+        when(taskRepository.save(taskEntity)).thenReturn(taskEntity);
+        TaskDTOOutput result = taskServiceImpl.save(task);
         assertNotNull(result);
         assertEquals("Task1", result.getName());
-        verify(taskRepository, times(1)).save(task);
+        verify(taskRepository, times(1)).save(taskEntity);
 
     }
 
@@ -126,12 +131,13 @@ class TaskServiceImplTest {
     @Test
     void update() {
 
-        TaskEntity task = new TaskEntity();
-        task.setId(1L);
+        TaskDTOInput task = new TaskDTOInput();
         task.setName("Task1");
         task.setDescription("Task1");
-        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
-        TaskEntity result = taskServiceImpl.update(1L, task);
+        TaskEntity taskEntity = TaskMapper.toEntity(task);
+        taskEntity.setId(1L);
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(taskEntity));
+        TaskDTOOutput result = taskServiceImpl.update(1L, task);
         assertNotNull(result);
         assertEquals("Task1", result.getName());
         verify(taskRepository, times(1)).findById(1L);
